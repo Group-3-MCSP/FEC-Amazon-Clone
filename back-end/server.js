@@ -82,6 +82,7 @@ app.post('/recs', (req, res) => {
   let is_limited_time_deal = rec.is_limited_time_deal;
   let is_prime_delivery = rec.is_prime_delivery;
   let limited_time_end = rec.limited_time_end;
+  let is_offers = rec.is_offers;
   let is_climate_friendly = rec.is_climate_friendly;
   pool.query('INSERT INTO recommendations (product_img, product_name, product_seller, num_reviews, operating_system, price, is_best_seller, is_limited_time_deal, is_prime_delivery, limited_time_end, is_offers, is_climate_friendly) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
   [product_img, product_name, product_seller, num_reviews, operating_system, price, is_best_seller, is_limited_time_deal, is_prime_delivery, limited_time_end, is_offers, is_climate_friendly],
