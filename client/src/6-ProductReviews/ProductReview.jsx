@@ -47,7 +47,7 @@ const ProductReview = (props) => {
       <div className="buttons-row">
         <div className="helpful-button" onClick={() => setCount((prev) => prev + 1)}>
           Helpful
-        </div>{' '}
+        </div>
         | <div className="report">Report abuse</div>
       </div>
     </div>

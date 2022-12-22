@@ -180,3 +180,21 @@
   font-size: 18px;
   font-weight: bold;
 }
+
+.show-button {
+  margin-top: 20px;
+  height: 27px;
+  width: 120px;
+  border: 1px solid #bdbdbd;
+  border-radius: 8px;
+  font-size: 13px;
+  color: black;
+  text-align: center;
+  line-height: 25px;
+  box-shadow: 1px 1px 1px #bdbdbd72;
+  cursor: pointer;
+}
+
+.show-button:hover {
+  background-color: #e0e0e072;
+}
