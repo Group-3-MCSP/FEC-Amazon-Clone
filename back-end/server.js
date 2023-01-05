@@ -1,14 +1,14 @@
 /* ==================== Dependencies ==================== */
 
-const express = require('express');
-const { Pool } = require('pg');
-const cors = require('cors');
-const config = require('./config.js');
+const express = require("express");
+const { Pool } = require("pg");
+const cors = require("cors");
+const config = require("./config.js");
 
 /* ==================== Initialize Express ==================== */
 
 const app = express();
-const port = config.port;
+const port = process.env.PORT || 8080;
 
 /* ==================== Initialize Pool ==================== */
 
@@ -23,9 +23,12 @@ app.use(express.json());
 /* ==================== Routes ==================== */
 
 /* ========== General ========== */
+app.get("/test", (req, res) => {
+  res.send("hello");
+});
 
 // Get full tables
-app.get('/Amazon/:table', (req, res) => {
+app.get("/Amazon/:table", (req, res) => {
   pool.query(`SELECT * FROM ${req.params.table}`).then((result) => {
     res.send(result.rows);
   });
@@ -33,10 +36,10 @@ app.get('/Amazon/:table', (req, res) => {
 
 /* ========== Q&A Routes ========== */
 
-app.post('/amazon_qa', (req, res) => {
+app.post("/amazon_qa", (req, res) => {
   const { question, answer, product_id, rating } = req.body;
   pool.query(
-    'INSERT INTO amazon_qa (question, answer, product_id, rating) VALUES ($1, $2, $3, $4)',
+    "INSERT INTO amazon_qa (question, answer, product_id, rating) VALUES ($1, $2, $3, $4)",
     [question, answer, product_id, rating],
     (error, result) => {
       if (error) {
@@ -58,31 +61,31 @@ app.post('/amazon_qa', (req, res) => {
 //   });
 // });
 
-app.get('/amazon_qa', (req, res) => {
+app.get("/amazon_qa", (req, res) => {
   pool
-    .query('SELECT * FROM amazon_qa')
+    .query("SELECT * FROM amazon_qa")
     .then((result) => {
       res.send(result.rows);
     })
     .catch((err) => {
-      res.status(400).send('Failed to GET questions');
+      res.status(400).send("Failed to GET questions");
     });
 });
 
 /* ========== Recommendation Routes ========== */
 
-app.get('/recs', (req, res) => {
+app.get("/recs", (req, res) => {
   pool
-    .query('SELECT * FROM recommendations')
+    .query("SELECT * FROM recommendations")
     .then((result) => {
       res.status(200).send(result.rows);
     })
     .catch((err) => {
-      res.status(400).send('Failed to GET recommendations');
+      res.status(400).send("Failed to GET recommendations");
     });
 });
 
-app.post('/recs', (req, res) => {
+app.post("/recs", (req, res) => {
   let rec = req.body;
   let product_img = rec.product_img;
   let product_name = rec.product_name;
@@ -97,7 +100,7 @@ app.post('/recs', (req, res) => {
   let is_offers = rec.is_offers;
   let is_climate_friendly = rec.is_climate_friendly;
   pool.query(
-    'INSERT INTO recommendations (product_img, product_name, product_seller, num_reviews, operating_system, price, is_best_seller, is_limited_time_deal, is_prime_delivery, limited_time_end, is_offers, is_climate_friendly) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
+    "INSERT INTO recommendations (product_img, product_name, product_seller, num_reviews, operating_system, price, is_best_seller, is_limited_time_deal, is_prime_delivery, limited_time_end, is_offers, is_climate_friendly) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
     [
       product_img,
       product_name,
@@ -124,15 +127,18 @@ app.post('/recs', (req, res) => {
 
 /* ========== Product Review Routes ========== */
 
-app.post('/reviews', (req, res) => {
+app.post("/reviews", (req, res) => {
   pool
-    .query(`INSERT INTO reviews (title, body, rating, username, datecreated ) VALUES ($1,$2,$3,$4,$5)`, [
-      req.body.title,
-      req.body.body,
-      req.body.rating,
-      req.body.username,
-      req.body.datecreated,
-    ])
+    .query(
+      `INSERT INTO reviews (title, body, rating, username, datecreated ) VALUES ($1,$2,$3,$4,$5)`,
+      [
+        req.body.title,
+        req.body.body,
+        req.body.rating,
+        req.body.username,
+        req.body.datecreated,
+      ]
+    )
     .then((result) => res.send(result))
     .catch((err) => res.status(404).send(err));
 });
